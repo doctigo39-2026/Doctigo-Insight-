@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctigo Insight — AI Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06080f;
+    --bg2: #0c1120;
+    --bg3: #121928;
+    --card: #151e30;
+    --card2: #1a2540;
+    --border: rgba(99,180,255,0.1);
+    --border2: rgba(99,180,255,0.2);
+    --teal: #00d4aa;
+    --teal2: #00b891;
+    --blue: #3b8bff;
+    --blue2: #63b4ff;
+    --accent: #7c5cfc;
+    --text: #e8eef8;
+    --text2: #8da4c8;
+    --text3: #4f6a94;
+    --red: #ff5757;
+    --amber: #ffb547;
+    --green: #2ecc8f;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 18px;
+    --sidebar-w: 240px;
+    --header-h: 60px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; overflow: hidden; }
+  
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w); min-width: var(--sidebar-w); height: 100vh;
+    background: var(--bg2); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; position: fixed; left: 0; top: 0; z-index: 100;
+    transition: transform .3s;
+  }
+  .logo-area {
+    padding: 20px 18px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .logo-icon svg { width: 20px; height: 20px; }
+  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; color: var(--text); line-height: 1.1; }
+  .logo-sub { font-size: 9px; color: var(--teal); font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .nav-section { padding: 12px 10px 6px; }
+  .nav-label { font-size: 9px; color: var(--text3); font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; padding: 0 8px 8px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+    border-radius: var(--radius-sm); cursor: pointer; transition: all .2s;
+    font-size: 13px; color: var(--text2); font-weight: 400; margin-bottom: 2px;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover { background: var(--card); color: var(--text); border-color: var(--border); }
+  .nav-item.active { background: rgba(0,212,170,0.08); color: var(--teal); border-color: rgba(0,212,170,0.25); font-weight: 500; }
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.8; }
+  .nav-item.active svg { opacity: 1; }
+  .nav-badge {
+    margin-left: auto; font-size: 9px; padding: 2px 7px; border-radius: 99px;
+    background: rgba(0,212,170,0.15); color: var(--teal); font-weight: 600; letter-spacing: 0.5px;
+  }
+
+  .sidebar-bottom {
+    margin-top: auto; padding: 14px 10px; border-top: 1px solid var(--border);
+  }
+  .user-chip {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    border-radius: var(--radius-sm); cursor: pointer;
+    background: var(--card); border: 1px solid var(--border);
+  }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 12px; font-weight: 500; color: var(--text); }
+  .user-plan { font-size: 10px; color: var(--teal); }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+  
+  /* HEADER */
+  .header {
+    height: var(--header-h); min-height: var(--header-h);
+    border-bottom: 1px solid var(--border); padding: 0 24px;
+    display: flex; align-items: center; gap: 16px;
+    background: var(--bg2); position: sticky; top: 0; z-index: 50;
+  }
+  .header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--text); flex: 1; }
+  .header-desc { font-size: 12px; color: var(--text3); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 2px rgba(46,204,143,0.25); }
+  .status-text { font-size: 11px; color: var(--green); font-weight: 500; }
+  .btn-sm {
+    padding: 7px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border2);
+    background: var(--card); color: var(--text2); font-size: 12px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all .2s; display: flex; align-items: center; gap: 6px;
+  }
+  .btn-sm:hover { background: var(--card2); color: var(--text); border-color: rgba(99,180,255,0.4); }
+  .btn-primary {
+    padding: 7px 16px; border-radius: var(--radius-sm); border: none;
+    background: linear-gradient(135deg, var(--teal), #00a882); color: #06080f;
+    font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all .2s; display: flex; align-items: center; gap: 6px;
+  }
+  .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  /* PANELS */
+  .panel { flex: 1; overflow-y: auto; display: none; }
+  .panel.active { display: flex; flex-direction: column; }
+  .panel::-webkit-scrollbar { width: 4px; }
+  .panel::-webkit-scrollbar-track { background: transparent; }
+  .panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+  /* HOME PANEL */
+  .home-panel { padding: 32px 28px; gap: 24px; }
+  .welcome-hero {
+    background: linear-gradient(135deg, rgba(0,212,170,0.06), rgba(59,139,255,0.06));
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 32px 36px; position: relative; overflow: hidden;
+  }
+  .welcome-hero::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,170,0.12) 0%, transparent 70%);
+  }
+  .welcome-hero h1 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .welcome-hero h1 span { color: var(--teal); }
+  .welcome-hero p { font-size: 14px; color: var(--text2); max-width: 500px; line-height: 1.7; margin-bottom: 20px; }
+  .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 20px; position: relative; overflow: hidden;
+  }
+  .stat-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+  }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); }
+  .stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-trend { font-size: 11px; color: var(--green); font-weight: 500; margin-top: 6px; }
+
+  .modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .module-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; cursor: pointer; transition: all .25s; position: relative; overflow: hidden;
+  }
+  .module-card:hover { border-color: var(--border2); transform: translateY(-2px); background: var(--card2); }
+  .module-icon {
+    width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; font-size: 22px;
+  }
+  .module-card h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .module-card p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .module-arrow { position: absolute; top: 18px; right: 18px; color: var(--text3); font-size: 16px; transition: transform .2s; }
+  .module-card:hover .module-arrow { transform: translate(2px, -2px); color: var(--teal); }
+
+  /* CHAT PANEL */
+  .chat-panel { padding: 0; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+  .msg { display: flex; gap: 12px; animation: fadeUp .3s ease; }
+  .msg.user { flex-direction: row-reverse; }
+  .msg-avatar { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; font-weight: 600; }
+  .msg-avatar.ai { background: linear-gradient(135deg, var(--teal), var(--blue)); color: #fff; font-family: 'Syne', sans-serif; }
+  .msg-avatar.user { background: var(--card2); color: var(--text2); }
+  .msg-bubble {
+    max-width: 72%; padding: 13px 16px; border-radius: 14px; font-size: 14px; line-height: 1.7;
+    background: var(--card); border: 1px solid var(--border); color: var(--text);
+  }
+  .msg.user .msg-bubble { background: rgba(0,212,170,0.08); border-color: rgba(0,212,170,0.2); color: var(--text); }
+  .msg-meta { font-size: 10px; color: var(--text3); margin-top: 6px; }
+  .msg.user .msg-meta { text-align: right; }
+  .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 6px 0; }
+  .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); animation: pulse 1.4s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: .2s; }
+  .typing-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes pulse { 0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .chat-input-area {
+    padding: 16px 28px 20px; border-top: 1px solid var(--border); background: var(--bg2);
+  }
+  .chat-mode-pills { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .mode-pill {
+    padding: 4px 12px; border-radius: 99px; font-size: 11px; cursor: pointer;
+    border: 1px solid var(--border); color: var(--text3); background: var(--bg3);
+    transition: all .2s; font-weight: 500;
+  }
+  .mode-pill.active { background: rgba(0,212,170,0.1); color: var(--teal); border-color: rgba(0,212,170,0.3); }
+  .chat-input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .chat-textarea {
+    flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 13px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    resize: none; outline: none; max-height: 140px; min-height: 50px; line-height: 1.5;
+    transition: border-color .2s;
+  }
+  .chat-textarea:focus { border-color: rgba(0,212,170,0.4); }
+  .chat-textarea::placeholder { color: var(--text3); }
+  .send-btn {
+    width: 46px; height: 46px; border-radius: var(--radius-sm); border: none;
+    background: linear-gradient(135deg, var(--teal), #00a882);
+    color: #06080f; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .2s;
+  }
+  .send-btn:hover { filter: brightness(1.1); transform: scale(1.05); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* FEATURE PANELS */
+  .feature-panel { padding: 28px; gap: 20px; }
+  .section-head { margin-bottom: 6px; }
+  .section-head h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+  .section-head p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  
+  .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .tool-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; cursor: pointer; transition: all .2s;
+  }
+  .tool-card:hover { border-color: var(--border2); background: var(--card2); }
+  .tool-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .tool-icon { font-size: 24px; }
+  .tool-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
+  .tool-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .tool-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 14px; }
+  .tool-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px; padding: 3px 9px; border-radius: 99px;
+    background: rgba(99,180,255,0.08); color: var(--blue2); border: 1px solid rgba(99,180,255,0.15);
+    font-weight: 500;
+  }
+
+  /* AUTOMATION */
+  .workflow-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 0; overflow: hidden;
+  }
+  .wf-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .wf-body { padding: 20px; }
+  .flow-steps { display: flex; flex-direction: column; gap: 0; }
+  .flow-step { display: flex; align-items: center; gap: 14px; padding: 10px 0; position: relative; }
+  .flow-step:not(:last-child)::after {
+    content: ''; position: absolute; left: 17px; top: 44px;
+    width: 1px; height: 20px; background: var(--border); z-index: 0;
+  }
+  .step-dot {
+    width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0; z-index: 1;
+    border: 1px solid var(--border);
+  }
+  .step-dot.done { background: rgba(0,212,170,0.1); border-color: rgba(0,212,170,0.3); }
+  .step-dot.active { background: rgba(59,139,255,0.1); border-color: rgba(59,139,255,0.3); animation: stepPulse 2s infinite; }
+  .step-dot.pending { background: var(--bg3); }
+  @keyframes stepPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(59,139,255,0.3); } 50% { box-shadow: 0 0 0 6px rgba(59,139,255,0); } }
+  .step-info { flex: 1; }
+  .step-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .step-detail { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .step-status { font-size: 10px; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
+  .step-status.done { background: rgba(0,212,170,0.1); color: var(--teal); }
+  .step-status.active { background: rgba(59,139,255,0.1); color: var(--blue2); }
+  .step-status.pending { background: var(--bg3); color: var(--text3); }
+
+  /* MEDICAL */
+  .vitals-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .vital-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+  .vital-icon { font-size: 22px; margin-bottom: 8px; }
+  .vital-val { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+  .vital-name { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .vital-status { font-size: 10px; margin-top: 4px; font-weight: 500; }
+  .vital-normal { color: var(--green); }
+  .vital-warn { color: var(--amber); }
+  .vital-alert { color: var(--red); }
+
+  .patient-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .patient-header { padding: 16px 20px; background: rgba(0,212,170,0.05); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .patient-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--blue)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
+  .patient-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+  .patient-meta { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .patient-body { padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .info-row { display: flex; flex-direction: column; gap: 3px; }
+  .info-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+  .info-val { font-size: 13px; color: var(--text); font-weight: 500; }
+
+  /* INPUT FORMS */
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; display: block; font-weight: 500; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 10px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none;
+    transition: border-color .2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(0,212,170,0.4); }
+  .form-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+  .form-select option { background: var(--card2); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* AI RESULT BOX */
+  .ai-result {
+    background: rgba(0,212,170,0.04); border: 1px solid rgba(0,212,170,0.15); border-radius: var(--radius);
+    padding: 18px 20px; display: none;
+  }
+  .ai-result.show { display: block; animation: fadeUp .3s ease; }
+  .ai-result-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .ai-result-head span { font-size: 11px; color: var(--teal); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+  .ai-result-body { font-size: 13px; color: var(--text); line-height: 1.8; white-space: pre-wrap; }
+
+  /* LOADING SPINNER */
+  .spinner { width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--teal); border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* TABS */
+  .tabs { display: flex; gap: 2px; background: var(--bg3); padding: 4px; border-radius: var(--radius-sm); margin-bottom: 20px; border: 1px solid var(--border); }
+  .tab { flex: 1; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; text-align: center; color: var(--text3); transition: all .2s; font-weight: 500; }
+  .tab.active { background: var(--card2); color: var(--teal); border: 1px solid rgba(0,212,170,0.2); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeUp .25s ease; }
+
+  /* RESPONSIVE HELPERS */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .full-col { grid-column: 1 / -1; }
+
+  /* SCROLLBAR GLOBAL */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  /* NOTIFICATION TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 999;
+    background: var(--card2); border: 1px solid var(--border2); border-radius: var(--radius);
+    padding: 14px 20px; display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--text); transform: translateY(80px);
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1); pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); }
+  .toast-icon { font-size: 16px; }
+
+  /* ONBOARDING */
+  .quick-prompts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 16px 0; }
+  .quick-prompt {
+    padding: 8px 16px; border-radius: 99px; font-size: 12px; cursor: pointer;
+    border: 1px solid var(--border); color: var(--text2); background: var(--card); transition: all .2s;
+  }
+  .quick-prompt:hover { border-color: rgba(0,212,170,0.3); color: var(--teal); background: rgba(0,212,170,0.05); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">Doctigo Insight</div>
+      <div class="logo-sub">AI Platform v2.0</div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" onclick="switchPanel('home', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="switchPanel('chat', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      AI Chat
+      <span class="nav-badge">Live</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Priority Modules</div>
+    <div class="nav-item" onclick="switchPanel('medical', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Healthcare AI
+      <span class="nav-badge">Core</span>
+    </div>
+    <div class="nav-item" onclick="switchPanel('marketing', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      Marketing Suite
+    </div>
+    <div class="nav-item" onclick="switchPanel('automation', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Workflow Auto.
+    </div>
+    <div class="nav-item" onclick="switchPanel('graphics', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Graphics & Media
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Tools</div>
+    <div class="nav-item" onclick="switchPanel('insights', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Analytics
+    </div>
+    <div class="nav-item" onclick="switchPanel('settings', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M21 12h-3M6 12H3M12 3V0M12 24v-3"/></svg>
+      Settings
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="user-chip">
+      <div class="avatar">DI</div>
+      <div class="user-info">
+        <div class="user-name">Doctigo Admin</div>
+        <div class="user-plan">Pro Plan Active</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+  <!-- HEADER -->
+  <header class="header" id="main-header">
+    <div>
+      <div class="header-title" id="header-title">Dashboard</div>
+      <div class="header-desc" id="header-desc">Doctigo Insight — AI Intelligence Platform</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-left:auto;">
+      <div class="status-dot"></div>
+      <span class="status-text">AI Online</span>
+    </div>
+    <button class="btn-sm" onclick="switchPanel('chat', document.querySelector('.nav-item:nth-child(2)'))">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      New Chat
+    </button>
+  </header>
+
+  <!-- HOME PANEL -->
+  <div class="panel home-panel active" id="panel-home">
+    <div class="welcome-hero">
+      <h1>Welcome to <span>Doctigo Insight</span></h1>
+      <p>Your enterprise-grade AI intelligence platform — combining healthcare analytics, marketing automation, workflow orchestration, and intelligent media generation in one unified system.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="switchPanel('chat', document.querySelectorAll('.nav-item')[1])">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Start AI Chat
+        </button>
+        <button class="btn-sm" onclick="switchPanel('medical', document.querySelectorAll('.nav-item')[2])">Healthcare Module</button>
+        <button class="btn-sm" onclick="switchPanel('automation', document.querySelectorAll('.nav-item')[4])">Automate Workflows</button>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num">98.4%</div>
+        <div class="stat-label">AI Accuracy</div>
+        <div class="stat-trend">↑ +2.1% this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">1,247</div>
+        <div class="stat-label">Tasks Automated</div>
+        <div class="stat-trend">↑ +143 today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">342</div>
+        <div class="stat-label">Patients Served</div>
+        <div class="stat-trend">↑ Active today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">87%</div>
+        <div class="stat-label">Workflow Saved</div>
+        <div class="stat-trend">↑ Time efficiency</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-head">
+        <h2>Core Modules</h2>
+        <p>Click any module to explore its full capabilities</p>
+      </div>
+      <div class="modules-grid">
+        <div class="module-card" onclick="switchPanel('medical', document.querySelectorAll('.nav-item')[2])">
+          <div class="module-icon" style="background:rgba(0,212,170,0.1)">🏥</div>
+          <h3>Healthcare AI</h3>
+          <p>Patient diagnostics, medical records, symptom analysis, and clinical decision support powered by AI.</p>
+          <span class="module-arrow">↗</span>
+        </div>
+        <div class="module-card" onclick="switchPanel('marketing', document.querySelectorAll('.nav-item')[3])">
+          <div class="module-icon" style="background:rgba(59,139,255,0.1)">📣</div>
+          <h3>Marketing Suite</h3>
+          <p>AI-generated campaigns, ad copy, social media content, video scripts, and brand messaging.</p>
+          <span class="module-arrow">↗</span>
+        </div>
+        <div class="module-card" onclick="switchPanel('automation', document.querySelectorAll('.nav-item')[4])">
+          <div class="module-icon" style="background:rgba(124,92,252,0.1)">⚡</div>
+          <h3>Workflow Automation</h3>
+          <p>Convert manual computer tasks into intelligent automated pipelines with zero-code setup.</p>
+          <span class="module-arrow">↗</span>
+        </div>
+        <div class="module-card" onclick="switchPanel('graphics', document.querySelectorAll('.nav-item')[5])">
+          <div class="module-icon" style="background:rgba(255,181,71,0.1)">🎨</div>
+          <h3>Graphics & Media</h3>
+          <p>Generate captions, content briefs, video concepts, and creative direction for any format.</p>
+          <span class="module-arrow">↗</span>
+        </div>
+        <div class="module-card" onclick="switchPanel('chat', document.querySelectorAll('.nav-item')[1])">
+          <div class="module-icon" style="background:rgba(255,87,87,0.1)">🤖</div>
+          <h3>Universal AI Chat</h3>
+          <p>Ask anything — medical queries, business strategy, technical help, or creative tasks.</p>
+          <span class="module-arrow">↗</span>
+        </div>
+        <div class="module-card" onclick="switchPanel('insights', document.querySelectorAll('.nav-item')[6])">
+          <div class="module-icon" style="background:rgba(46,204,143,0.1)">📊</div>
+          <h3>Analytics & Insights</h3>
+          <p>Real-time performance metrics, AI usage analytics, and business intelligence dashboards.</p>
+          <span class="module-arrow">↗</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI CHAT PANEL -->
+  <div class="panel chat-panel" id="panel-chat" style="display:none;flex-direction:column;">
+    <div class="chat-messages" id="chat-messages">
+      <div style="text-align:center;padding:20px 0;">
+        <div style="font-size:32px;margin-bottom:12px;">🧠</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Doctigo Insight AI</div>
+        <div style="font-size:13px;color:var(--text2);max-width:420px;margin:0 auto;line-height:1.7;">
+          I'm your intelligent assistant. Ask me anything — medical advice, marketing strategy, workflow design, content creation, or anything else.
+        </div>
+        <div class="quick-prompts">
+          <div class="quick-prompt" onclick="sendQuick('Analyse symptoms: headache, fever, and fatigue for 3 days')">🏥 Symptom Analysis</div>
+          <div class="quick-prompt" onclick="sendQuick('Create a healthcare marketing campaign for a new telemedicine service')">📣 Marketing Campaign</div>
+          <div class="quick-prompt" onclick="sendQuick('Design a workflow to automate patient appointment scheduling and reminders')">⚡ Workflow Design</div>
+          <div class="quick-prompt" onclick="sendQuick('Write Instagram captions for a medical clinic launching a wellness program')">🎨 Social Captions</div>
+          <div class="quick-prompt" onclick="sendQuick('What are the latest trends in AI-powered healthcare diagnostics?')">💡 Healthcare Trends</div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <div class="chat-mode-pills">
+        <div class="mode-pill active" onclick="setMode(this,'general')">General AI</div>
+        <div class="mode-pill" onclick="setMode(this,'medical')">Medical Expert</div>
+        <div class="mode-pill" onclick="setMode(this,'marketing')">Marketing AI</div>
+        <div class="mode-pill" onclick="setMode(this,'automation')">Workflow AI</div>
+        <div class="mode-pill" onclick="setMode(this,'content')">Content Creator</div>
+      </div>
+      <div class="chat-input-row">
+        <textarea class="chat-textarea" id="chat-input" placeholder="Ask Doctigo Insight anything..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEALTHCARE PANEL -->
+  <div class="panel feature-panel" id="panel-medical" style="display:none;">
+    <div class="section-head">
+      <h2>Healthcare AI Module</h2>
+      <p>Advanced patient management, diagnostics support, and clinical intelligence</p>
+    </div>
+
+    <div class="patient-card">
+      <div class="patient-header">
+        <div class="patient-avatar">RK</div>
+        <div>
+          <div class="patient-name">Rajesh Kumar</div>
+          <div class="patient-meta">ID: PT-20241203 · Male, 45 yrs · Blood: A+</div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:8px;">
+          <span class="step-status done">Active Patient</span>
+        </div>
+      </div>
+      <div class="patient-body">
+        <div class="info-row"><div class="info-label">Primary Diagnosis</div><div class="info-val">Hypertension Stage 2</div></div>
+        <div class="info-row"><div class="info-label">Last Visit</div><div class="info-val">2 days ago</div></div>
+        <div class="info-row"><div class="info-label">Medications</div><div class="info-val">Amlodipine 5mg, Metoprolol</div></div>
+        <div class="info-row"><div class="info-label">Next Appointment</div><div class="info-val">Dec 15, 2024</div></div>
+      </div>
+    </div>
+
+    <div class="vitals-grid">
+      <div class="vital-card">
+        <div class="vital-icon">❤️</div>
+        <div class="vital-val" style="color:var(--red)">148/92</div>
+        <div class="vital-name">Blood Pressure</div>
+        <div class="vital-status vital-warn">Elevated</div>
+      </div>
+      <div class="vital-card">
+        <div class="vital-icon">🫀</div>
+        <div class="vital-val" style="color:var(--teal)">76 bpm</div>
+        <div class="vital-name">Heart Rate</div>
+        <div class="vital-status vital-normal">Normal</div>
+      </div>
+      <div class="vital-card">
+        <div class="vital-icon">🌡️</div>
+        <div class="vital-val" style="color:var(--teal)">98.6°F</div>
+        <div class="vital-name">Temperature</div>
+        <div class="vital-status vital-normal">Normal</div>
+      </div>
+      <div class="vital-card">
+        <div class="vital-icon">💉</div>
+        <div class="vital-val" style="color:var(--amber)">118</div>
+        <div class="vital-name">Blood Glucose</div>
+        <div class="vital-status vital-warn">Borderline</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'symptom')">Symptom Analyzer</div>
+      <div class="tab" onclick="switchTab(this,'prescription')">Prescription AI</div>
+      <div class="tab" onclick="switchTab(this,'report')">Report Summary</div>
+    </div>
+
+    <div class="tab-content active" id="tab-symptom">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Patient Name</label>
+          <input class="form-input" placeholder="Enter patient name" id="med-patient" value="Rajesh Kumar">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age & Gender</label>
+          <input class="form-input" placeholder="e.g. 45 yrs, Male" id="med-age" value="45 yrs, Male">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Symptoms (describe in detail)</label>
+        <textarea class="form-textarea" id="med-symptoms" placeholder="e.g. Persistent headache for 3 days, dizziness when standing, occasional chest tightness...">Persistent headache for 3 days, dizziness when standing, occasional chest tightness, BP elevated at 148/92</textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Existing Conditions</label>
+          <input class="form-input" id="med-conditions" value="Hypertension Stage 2, Pre-diabetes">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Current Medications</label>
+          <input class="form-input" id="med-meds" value="Amlodipine 5mg, Metoprolol 25mg">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="runMedicalAI()" style="width:100%;justify-content:center;padding:12px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Run AI Symptom Analysis
+      </button>
+      <div class="ai-result" id="med-result" style="margin-top:16px;">
+        <div class="ai-result-head">
+          <div class="status-dot"></div>
+          <span>Doctigo Insight — Clinical Analysis</span>
+        </div>
+        <div class="ai-result-body" id="med-result-body"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-prescription">
+      <div class="form-group">
+        <label class="form-label">Condition to Treat</label>
+        <input class="form-input" id="presc-condition" placeholder="e.g. Hypertension with elevated BP reading">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Patient Profile</label>
+        <textarea class="form-textarea" id="presc-profile" placeholder="Age, weight, allergies, existing medications..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="runPrescriptionAI()" style="width:100%;justify-content:center;padding:12px;">
+        Generate AI Prescription Guidance
+      </button>
+      <div class="ai-result" id="presc-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Prescription Guidance</span></div>
+        <div class="ai-result-body" id="presc-result-body"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-report">
+      <div class="form-group">
+        <label class="form-label">Upload/Paste Lab Report Data</label>
+        <textarea class="form-textarea" id="report-data" placeholder="Paste lab results, imaging reports, or any medical data here..." style="min-height:120px;"></textarea>
+      </div>
+      <button class="btn-primary" onclick="runReportAI()" style="width:100%;justify-content:center;padding:12px;">
+        Summarize & Analyze Report
+      </button>
+      <div class="ai-result" id="report-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Report Analysis</span></div>
+        <div class="ai-result-body" id="report-result-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKETING PANEL -->
+  <div class="panel feature-panel" id="panel-marketing" style="display:none;">
+    <div class="section-head">
+      <h2>Marketing Suite</h2>
+      <p>AI-powered campaigns, content, and creative generation</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'campaign')">Campaign Builder</div>
+      <div class="tab" onclick="switchTab(this,'social')">Social Media</div>
+      <div class="tab" onclick="switchTab(this,'adcopy')">Ad Copywriting</div>
+    </div>
+
+    <div class="tab-content active" id="tab-campaign">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Business / Brand Name</label>
+          <input class="form-input" id="mkt-brand" placeholder="e.g. Doctigo Healthcare" value="Doctigo Healthcare">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Campaign Goal</label>
+          <select class="form-select" id="mkt-goal">
+            <option>Brand Awareness</option>
+            <option>Patient Acquisition</option>
+            <option>Service Launch</option>
+            <option>Re-engagement</option>
+            <option>Event Promotion</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Target Audience</label>
+          <input class="form-input" id="mkt-audience" placeholder="e.g. Urban professionals 25-50 years" value="Urban professionals 25-50 years, health-conscious">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Platform Focus</label>
+          <select class="form-select" id="mkt-platform">
+            <option>Multi-platform (All)</option>
+            <option>Instagram + Facebook</option>
+            <option>LinkedIn</option>
+            <option>Google Ads</option>
+            <option>Email Marketing</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Service/Product to Promote</label>
+        <textarea class="form-textarea" id="mkt-product" placeholder="Describe what you're promoting...">AI-powered telemedicine consultations and remote patient monitoring service</textarea>
+      </div>
+      <button class="btn-primary" onclick="runMarketingAI('campaign')" style="width:100%;justify-content:center;padding:12px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        Generate Full Campaign
+      </button>
+      <div class="ai-result" id="mkt-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Campaign Strategy</span></div>
+        <div class="ai-result-body" id="mkt-result-body"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-social">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Platform</label>
+          <select class="form-select" id="social-platform">
+            <option>Instagram</option>
+            <option>Twitter/X</option>
+            <option>LinkedIn</option>
+            <option>Facebook</option>
+            <option>WhatsApp Status</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Post Type</label>
+          <select class="form-select" id="social-type">
+            <option>Educational Health Tip</option>
+            <option>Service Announcement</option>
+            <option>Patient Testimonial</option>
+            <option>Awareness Campaign</option>
+            <option>Promotional Offer</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Topic / Key Message</label>
+        <textarea class="form-textarea" id="social-topic" placeholder="What's the post about?">World Heart Day - importance of regular BP monitoring and early detection of hypertension</textarea>
+      </div>
+      <button class="btn-primary" onclick="runMarketingAI('social')" style="width:100%;justify-content:center;padding:12px;">
+        Generate Post + Captions + Hashtags
+      </button>
+      <div class="ai-result" id="social-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Social Media Content</span></div>
+        <div class="ai-result-body" id="social-result-body"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-adcopy">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ad Format</label>
+          <select class="form-select" id="ad-format">
+            <option>Google Search Ad</option>
+            <option>Facebook/Instagram Ad</option>
+            <option>Email Subject Lines</option>
+            <option>Banner Ad Copy</option>
+            <option>Video Script (30-sec)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tone</label>
+          <select class="form-select" id="ad-tone">
+            <option>Professional & Trustworthy</option>
+            <option>Urgent & Compelling</option>
+            <option>Warm & Empathetic</option>
+            <option>Bold & Direct</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Offer / Key Benefit</label>
+        <textarea class="form-textarea" id="ad-offer" placeholder="What's the main offer or benefit?">Free first consultation + 24/7 AI health monitoring at just ₹299/month</textarea>
+      </div>
+      <button class="btn-primary" onclick="runMarketingAI('adcopy')" style="width:100%;justify-content:center;padding:12px;">
+        Generate Ad Copy Variations
+      </button>
+      <div class="ai-result" id="adcopy-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Ad Copy Output</span></div>
+        <div class="ai-result-body" id="adcopy-result-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKFLOW AUTOMATION PANEL -->
+  <div class="panel feature-panel" id="panel-automation" style="display:none;">
+    <div class="section-head">
+      <h2>Workflow Automation</h2>
+      <p>Convert manual computer tasks into intelligent automated pipelines</p>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="form-group">
+          <label class="form-label">Describe Your Manual Task</label>
+          <textarea class="form-textarea" id="auto-task" placeholder="Describe what you currently do manually..." style="min-height:100px;">Every morning I manually check 40+ patient records, note who needs follow-up calls, then send reminder emails, update a spreadsheet, and schedule appointments in our calendar</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Frequency</label>
+          <select class="form-select" id="auto-freq">
+            <option>Daily</option>
+            <option>Weekly</option>
+            <option>Monthly</option>
+            <option>Triggered by event</option>
+            <option>Real-time / Continuous</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tools Involved (comma separated)</label>
+          <input class="form-input" id="auto-tools" value="Excel, Gmail, Google Calendar, Patient Management System">
+        </div>
+        <button class="btn-primary" onclick="runAutomationAI()" style="width:100%;justify-content:center;padding:12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Design Automation Blueprint
+        </button>
+        <div class="ai-result" id="auto-result" style="margin-top:16px;">
+          <div class="ai-result-head"><div class="status-dot"></div><span>Automation Blueprint</span></div>
+          <div class="ai-result-body" id="auto-result-body"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="workflow-card">
+          <div class="wf-header">
+            <span style="font-size:16px;">🔄</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text)">Patient Follow-up Pipeline</div>
+              <div style="font-size:11px;color:var(--text3)">Active · Runs daily at 8:00 AM</div>
+            </div>
+            <span class="step-status done" style="margin-left:auto">Running</span>
+          </div>
+          <div class="wf-body">
+            <div class="flow-steps">
+              <div class="flow-step">
+                <div class="step-dot done">✓</div>
+                <div class="step-info"><div class="step-name">Fetch patient records</div><div class="step-detail">Scanned 342 records</div></div>
+                <span class="step-status done">Done</span>
+              </div>
+              <div class="flow-step">
+                <div class="step-dot done">✓</div>
+                <div class="step-info"><div class="step-name">Flag follow-up cases</div><div class="step-detail">23 patients flagged</div></div>
+                <span class="step-status done">Done</span>
+              </div>
+              <div class="flow-step">
+                <div class="step-dot active">⚡</div>
+                <div class="step-info"><div class="step-name">Send reminder emails</div><div class="step-detail">18/23 sent</div></div>
+                <span class="step-status active">In Progress</span>
+              </div>
+              <div class="flow-step">
+                <div class="step-dot pending">○</div>
+                <div class="step-info"><div class="step-name">Update spreadsheet</div><div class="step-detail">Queued</div></div>
+                <span class="step-status pending">Pending</span>
+              </div>
+              <div class="flow-step">
+                <div class="step-dot pending">○</div>
+                <div class="step-info"><div class="step-name">Schedule appointments</div><div class="step-detail">Queued</div></div>
+                <span class="step-status pending">Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wf-header">
+            <span style="font-size:16px;">📊</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text)">Marketing Report Auto-gen</div>
+              <div style="font-size:11px;color:var(--text3)">Active · Every Monday 9:00 AM</div>
+            </div>
+            <span class="step-status done" style="margin-left:auto">Active</span>
+          </div>
+          <div class="wf-body" style="padding:14px 20px;">
+            <div style="font-size:12px;color:var(--text2)">Automatically collects campaign data, generates performance reports, and emails to stakeholders. Saved 4hrs/week.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRAPHICS PANEL -->
+  <div class="panel feature-panel" id="panel-graphics" style="display:none;">
+    <div class="section-head">
+      <h2>Graphics & Media AI</h2>
+      <p>Generate captions, creative briefs, video scripts, and content direction</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'caption')">Caption Generator</div>
+      <div class="tab" onclick="switchTab(this,'videoscript')">Video Script</div>
+      <div class="tab" onclick="switchTab(this,'creative')">Creative Brief</div>
+    </div>
+
+    <div class="tab-content active" id="tab-caption">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Visual / Graphic Theme</label>
+          <input class="form-input" id="cap-theme" placeholder="e.g. Doctor with stethoscope in modern clinic" value="Doctor using AI tablet in modern telemedicine clinic">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Platform & Audience</label>
+          <select class="form-select" id="cap-platform">
+            <option>Instagram (General)</option>
+            <option>Instagram (Healthcare)</option>
+            <option>LinkedIn (Professional)</option>
+            <option>Facebook (Community)</option>
+            <option>Twitter/X (Viral)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Brand Voice</label>
+          <select class="form-select" id="cap-voice">
+            <option>Professional & Trustworthy</option>
+            <option>Warm & Friendly</option>
+            <option>Inspirational</option>
+            <option>Bold & Edgy</option>
+            <option>Educational</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Caption Length</label>
+          <select class="form-select" id="cap-length">
+            <option>Short (1-2 lines)</option>
+            <option>Medium (3-5 lines)</option>
+            <option>Long (storytelling)</option>
+            <option>All 3 variations</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="runGraphicsAI('caption')" style="width:100%;justify-content:center;padding:12px;">
+        Generate Captions + Hashtags
+      </button>
+      <div class="ai-result" id="caption-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Caption Output</span></div>
+        <div class="ai-result-body" id="caption-result-body"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-videoscript">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Video Type</label>
+          <select class="form-select" id="vid-type">
+            <option>30-second Ad Spot</option>
+            <option>60-second Brand Story</option>
+            <option>2-minute Explainer</option>
+            <option>Reel / Short (15 sec)</option>
+            <option>YouTube Intro (30 sec)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tone & Style</label>
+          <select class="form-select" id="vid-tone">
+            <option>Cinematic & Emotional</option>
+            <option>Upbeat & Energetic</option>
+            <option>Corporate & Trustworthy</option>
+            <option>Documentary</option>
+            <option>Conversational / UGC-style</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Key Message / Story</label>
+        <textarea class="form-textarea" id="vid-message" placeholder="What should the video communicate?">Doctigo Insight transforms healthcare — showing how AI helps doctors make faster, more accurate diagnoses while patients get personalized care from anywhere</textarea>
+      </div>
+      <button class="btn-primary" onclick="runGraphicsAI('video')" style="width:100%;justify-content:center;padding:12px;">
+        Generate Video Script + Storyboard
+      </button>
+      <div class="ai-result" id="video-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Video Script</span></div>
+        <div class="ai-result-body" id="video-result-body"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-creative">
+      <div class="form-group">
+        <label class="form-label">Campaign / Project Name</label>
+        <input class="form-input" id="brief-name" placeholder="e.g. Q1 2025 Wellness Campaign">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Design Style</label>
+          <select class="form-select" id="brief-style">
+            <option>Clean & Minimal</option>
+            <option>Bold & Vibrant</option>
+            <option>Medical / Clinical</option>
+            <option>Modern Tech</option>
+            <option>Warm & Human</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deliverables</label>
+          <select class="form-select" id="brief-deliverables">
+            <option>Social Media Kit</option>
+            <option>Print + Digital</option>
+            <option>Video + Static</option>
+            <option>Complete Brand Kit</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Campaign Objective</label>
+        <textarea class="form-textarea" id="brief-objective" placeholder="What's the campaign trying to achieve?"></textarea>
+      </div>
+      <button class="btn-primary" onclick="runGraphicsAI('brief')" style="width:100%;justify-content:center;padding:12px;">
+        Generate Creative Brief
+      </button>
+      <div class="ai-result" id="brief-result" style="margin-top:16px;">
+        <div class="ai-result-head"><div class="status-dot"></div><span>Creative Brief</span></div>
+        <div class="ai-result-body" id="brief-result-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS PANEL -->
+  <div class="panel feature-panel" id="panel-insights" style="display:none;">
+    <div class="section-head">
+      <h2>Analytics & Insights</h2>
+      <p>Real-time platform performance and AI usage intelligence</p>
+    </div>
+    <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+      <div class="stat-card"><div class="stat-num" style="color:var(--teal)">4,821</div><div class="stat-label">Total AI Queries</div><div class="stat-trend">↑ +312 this week</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--blue)">1,247</div><div class="stat-label">Workflows Automated</div><div class="stat-trend">↑ +87 this month</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--accent)">536 hrs</div><div class="stat-label">Time Saved</div><div class="stat-trend">↑ Cumulative</div></div>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">🏥</span><div><div class="tool-title">Healthcare Module</div><div class="tool-sub">Utilization: 38%</div></div></div>
+        <div style="background:var(--bg3);border-radius:99px;height:6px;margin-bottom:10px;"><div style="background:linear-gradient(90deg,var(--teal),var(--blue));height:6px;border-radius:99px;width:38%;"></div></div>
+        <div class="tool-desc">342 patients analyzed · 89 diagnoses supported · 145 prescriptions generated</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">📣</span><div><div class="tool-title">Marketing Suite</div><div class="tool-sub">Utilization: 27%</div></div></div>
+        <div style="background:var(--bg3);border-radius:99px;height:6px;margin-bottom:10px;"><div style="background:linear-gradient(90deg,var(--blue),var(--accent));height:6px;border-radius:99px;width:27%;"></div></div>
+        <div class="tool-desc">67 campaigns built · 412 social posts · 234 ad copies generated this month</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">⚡</span><div><div class="tool-title">Workflow Automation</div><div class="tool-sub">Utilization: 21%</div></div></div>
+        <div style="background:var(--bg3);border-radius:99px;height:6px;margin-bottom:10px;"><div style="background:linear-gradient(90deg,var(--accent),var(--red));height:6px;border-radius:99px;width:21%;"></div></div>
+        <div class="tool-desc">1,247 tasks automated · 14 active pipelines · 536 hours saved</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">🎨</span><div><div class="tool-title">Graphics & Media</div><div class="tool-sub">Utilization: 14%</div></div></div>
+        <div style="background:var(--bg3);border-radius:99px;height:6px;margin-bottom:10px;"><div style="background:linear-gradient(90deg,var(--amber),var(--teal));height:6px;border-radius:99px;width:14%;"></div></div>
+        <div class="tool-desc">189 captions · 43 video scripts · 67 creative briefs generated</div>
+      </div>
+    </div>
+    <div class="ai-result show" style="background:rgba(59,139,255,0.04);border-color:rgba(59,139,255,0.15);">
+      <div class="ai-result-head"><div class="status-dot" style="background:var(--blue)"></div><span style="color:var(--blue2)">Weekly AI Insight</span></div>
+      <div class="ai-result-body">Healthcare module usage increased 24% this week, driven by appointment follow-up automation. Recommend expanding the Workflow Automation module to also handle billing reminders — estimated additional 2.3 hrs/day saved. Marketing AI performance peak: Wednesday 2–4 PM shows highest engagement on generated content.</div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div class="panel feature-panel" id="panel-settings" style="display:none;">
+    <div class="section-head"><h2>Settings</h2><p>Configure your Doctigo Insight workspace</p></div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">🔑</span><div><div class="tool-title">API & Integrations</div><div class="tool-sub">Connected services</div></div></div>
+        <div class="tool-desc">Manage API keys, connect EHR systems, CRM platforms, marketing tools, and third-party automation services.</div>
+        <div class="tool-tags"><span class="tag">Anthropic Claude</span><span class="tag">EHR</span><span class="tag">Zapier</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">🏢</span><div><div class="tool-title">Organization Settings</div><div class="tool-sub">Team & roles</div></div></div>
+        <div class="tool-desc">Manage team members, set permissions, configure department-level access, and customize the AI's specialty focus.</div>
+        <div class="tool-tags"><span class="tag">Team</span><span class="tag">Roles</span><span class="tag">Permissions</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">🛡️</span><div><div class="tool-title">Compliance & Security</div><div class="tool-sub">HIPAA · Data Privacy</div></div></div>
+        <div class="tool-desc">Configure HIPAA compliance settings, data encryption, audit logs, and regional data storage preferences.</div>
+        <div class="tool-tags"><span class="tag">HIPAA</span><span class="tag">GDPR</span><span class="tag">Encrypted</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header"><span class="tool-icon">🧠</span><div><div class="tool-title">AI Behavior Config</div><div class="tool-sub">Model preferences</div></div></div>
+        <div class="tool-desc">Adjust AI tone, response depth, medical specialty focus, language preferences, and output formatting rules.</div>
+        <div class="tool-tags"><span class="tag">Claude API</span><span class="tag">Tuning</span><span class="tag">Language</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✓</span>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<script>
+const API_BASE = "";   // same-origin — works locally and on Vercel
+let chatHistory = [];
+let currentMode = 'general';
+
+function switchPanel(id, navEl) {
+  document.querySelectorAll('.panel').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  const panel = document.getElementById('panel-' + id);
+  panel.style.display = 'flex';
+  panel.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  const titles = { home: ['Dashboard','Overview & quick access'], chat: ['AI Chat','Live Claude-powered assistant'], medical: ['Healthcare AI','Clinical intelligence & patient analytics'], marketing: ['Marketing Suite','AI-powered campaigns & content'], automation: ['Workflow Automation','Intelligent task pipelines'], graphics: ['Graphics & Media','AI creative & caption generation'], insights: ['Analytics','Platform intelligence & metrics'], settings: ['Settings','Configuration & integrations'] };
+  const t = titles[id] || ['Doctigo Insight',''];
+  document.getElementById('header-title').textContent = t[0];
+  document.getElementById('header-desc').textContent = t[1];
+}
+
+function switchTab(el, id) {
+  const parent = el.closest('.panel, .feature-panel');
+  parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  parent.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const tc = document.getElementById('tab-' + id);
+  if (tc) tc.classList.add('active');
+}
+
+function setMode(el, mode) {
+  document.querySelectorAll('.mode-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active'); currentMode = mode;
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function scrollChat() {
+  const c = document.getElementById('chat-messages');
+  setTimeout(() => c.scrollTop = c.scrollHeight, 50);
+}
+
+function addMsg(role, text) {
+  const c = document.getElementById('chat-messages');
+  const isAI = role === 'ai';
+  const div = document.createElement('div');
+  div.className = 'msg ' + (isAI ? '' : 'user');
+  div.innerHTML = `
+    <div class="msg-avatar ${isAI ? 'ai' : 'user'}">${isAI ? 'DI' : 'You'}</div>
+    <div>
+      <div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div>
+      <div class="msg-meta">${isAI ? 'Doctigo Insight · ' : ''}${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`;
+  c.appendChild(div);
+  scrollChat();
+  return div;
+}
+
+function addTyping() {
+  const c = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg'; div.id = 'typing-msg';
+  div.innerHTML = `<div class="msg-avatar ai">DI</div><div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div></div>`;
+  c.appendChild(div);
+  scrollChat();
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-msg');
+  if (t) t.remove();
+}
+
+const modePrompts = {
+  general: "You are Doctigo Insight, an advanced AI assistant for a healthcare technology platform. You're knowledgeable across medical, marketing, business, and technology domains. Be professional, accurate, and comprehensive.",
+  medical: "You are Doctigo Insight's Medical AI — a highly knowledgeable clinical assistant. Provide detailed, evidence-based medical information. Always recommend consulting licensed physicians for actual medical decisions. Be thorough and use proper medical terminology.",
+  marketing: "You are Doctigo Insight's Marketing AI — an expert in healthcare marketing, digital campaigns, content strategy, and brand communication. Create compelling, HIPAA-compliant marketing content.",
+  automation: "You are Doctigo Insight's Workflow AI — an expert in process automation, RPA, and digital transformation. Help design efficient automated workflows replacing manual computer tasks.",
+  content: "You are Doctigo Insight's Content Creator — an expert in writing captions, scripts, creative briefs, and multimedia content for healthcare brands. Produce engaging, platform-optimized content."
+};
+
+async function callAPI(messages, systemPrompt, max_tokens = 1000) {
+  const res = await fetch(`${API_BASE}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, system: systemPrompt, max_tokens })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data.content;
+}
+
+async function callModule(module, prompt) {
+  const res = await fetch(`${API_BASE}/api/module/${module}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt, max_tokens: 1200 })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data.content;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('send-btn').disabled = true;
+  addMsg('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  addTyping();
+  try {
+    const reply = await callAPI(chatHistory, modePrompts[currentMode]);
+    removeTyping();
+    addMsg('ai', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch (e) {
+    removeTyping();
+    addMsg('ai', 'Sorry, I encountered an error: ' + e.message + '. Please check your API connection and try again.');
+  }
+  document.getElementById('send-btn').disabled = false;
+}
+
+function sendQuick(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+async function runMedicalAI() {
+  const btn = event.currentTarget;
+  const resultDiv = document.getElementById('med-result');
+  const resultBody = document.getElementById('med-result-body');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Analyzing...';
+  resultDiv.classList.remove('show');
+  const prompt = `Patient: ${document.getElementById('med-patient').value}, ${document.getElementById('med-age').value}
+Symptoms: ${document.getElementById('med-symptoms').value}
+Existing Conditions: ${document.getElementById('med-conditions').value}
+Current Medications: ${document.getElementById('med-meds').value}
+
+Provide a comprehensive clinical analysis including: 1) Symptom assessment 2) Potential diagnoses (differential) 3) Risk flags 4) Recommended tests 5) Treatment considerations 6) Urgency level. Format clearly with headers.`;
+  try {
+    const reply = await callModule('medical', prompt);
+    resultBody.textContent = reply;
+    resultDiv.classList.add('show');
+    showToast('Analysis complete');
+  } catch(e) { alert('API Error: ' + e.message); }
+  btn.disabled = false; btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Run AI Symptom Analysis';
+}
+
+async function runPrescriptionAI() {
+  const btn = event.currentTarget;
+  const resultDiv = document.getElementById('presc-result');
+  const resultBody = document.getElementById('presc-result-body');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Generating...';
+  resultDiv.classList.remove('show');
+  const prompt = `Condition: ${document.getElementById('presc-condition').value}
+Patient Profile: ${document.getElementById('presc-profile').value}
+Provide: 1) First-line treatment options 2) Dosage guidance 3) Drug interactions to check 4) Contraindications 5) Monitoring requirements 6) Alternative options`;
+  try {
+    const reply = await callModule('medical', prompt);
+    resultBody.textContent = reply;
+    resultDiv.classList.add('show');
+    showToast('Prescription guidance ready');
+  } catch(e) { alert('API Error: ' + e.message); }
+  btn.disabled = false; btn.textContent = 'Generate AI Prescription Guidance';
+}
+
+async function runReportAI() {
+  const btn = event.currentTarget;
+  const resultDiv = document.getElementById('report-result');
+  const resultBody = document.getElementById('report-result-body');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Processing...';
+  resultDiv.classList.remove('show');
+  const data = document.getElementById('report-data').value;
+  if (!data.trim()) { alert('Please paste report data first'); btn.disabled = false; btn.textContent = 'Summarize & Analyze Report'; return; }
+  try {
+    const reply = await callModule('medical', `Analyze this medical report and provide: 1) Summary of key findings 2) Abnormal values highlighted 3) Clinical significance 4) Recommended follow-up actions:\n\n${data}`);
+    resultBody.textContent = reply;
+    resultDiv.classList.add('show');
+    showToast('Report analyzed');
+  } catch(e) { alert('API Error: ' + e.message); }
+  btn.disabled = false; btn.textContent = 'Summarize & Analyze Report';
+}
+
+async function runMarketingAI(type) {
+  const btn = event.currentTarget;
+  let prompt, resultId, resultBodyId;
+  if (type === 'campaign') {
+    resultId = 'mkt-result'; resultBodyId = 'mkt-result-body';
+    prompt = `Create a full marketing campaign for:\nBrand: ${document.getElementById('mkt-brand').value}\nGoal: ${document.getElementById('mkt-goal').value}\nAudience: ${document.getElementById('mkt-audience').value}\nPlatform: ${document.getElementById('mkt-platform').value}\nProduct: ${document.getElementById('mkt-product').value}\n\nInclude: Campaign concept, tagline, key messages, content calendar outline, channel-specific strategies, and KPIs.`;
+  } else if (type === 'social') {
+    resultId = 'social-result'; resultBodyId = 'social-result-body';
+    prompt = `Create social media content for:\nPlatform: ${document.getElementById('social-platform').value}\nType: ${document.getElementById('social-type').value}\nTopic: ${document.getElementById('social-topic').value}\n\nProvide: 3 caption variations (short/medium/long), relevant hashtags (15-20), emoji suggestions, best posting time, and engagement prompts.`;
+  } else {
+    resultId = 'adcopy-result'; resultBodyId = 'adcopy-result-body';
+    prompt = `Create ad copy for:\nFormat: ${document.getElementById('ad-format').value}\nTone: ${document.getElementById('ad-tone').value}\nOffer: ${document.getElementById('ad-offer').value}\n\nProvide 3 variations with headlines, body copy, and CTAs.`;
+  }
+  btn.disabled = true;
+  const origText = btn.textContent; btn.innerHTML = '<div class="spinner"></div> Generating...';
+  const resultDiv = document.getElementById(resultId);
+  resultDiv.classList.remove('show');
+  try {
+    const reply = await callModule('marketing', prompt);
+    document.getElementById(resultBodyId).textContent = reply;
+    resultDiv.classList.add('show');
+    showToast('Content generated successfully');
+  } catch(e) { alert('API Error: ' + e.message); }
+  btn.disabled = false; btn.textContent = origText;
+}
+
+async function runAutomationAI() {
+  const btn = event.currentTarget;
+  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Designing...';
+  const resultDiv = document.getElementById('auto-result');
+  resultDiv.classList.remove('show');
+  const prompt = `Design a complete automation workflow for:\nTask: ${document.getElementById('auto-task').value}\nFrequency: ${document.getElementById('auto-freq').value}\nTools: ${document.getElementById('auto-tools').value}\n\nProvide: 1) Step-by-step automation blueprint 2) Recommended tools/platforms (n8n, Zapier, Make, Python scripts) 3) Trigger conditions 4) Error handling 5) Estimated time savings 6) Implementation priority`;
+  try {
+    const reply = await callModule('automation', prompt);
+    document.getElementById('auto-result-body').textContent = reply;
+    resultDiv.classList.add('show');
+    showToast('Automation blueprint ready');
+  } catch(e) { alert('API Error: ' + e.message); }
+  btn.disabled = false; btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Design Automation Blueprint';
+}
+
+async function runGraphicsAI(type) {
+  const btn = event.currentTarget;
+  let prompt, resultId, resultBodyId;
+  if (type === 'caption') {
+    resultId = 'caption-result'; resultBodyId = 'caption-result-body';
+    prompt = `Generate social media captions for:\nVisual: ${document.getElementById('cap-theme').value}\nPlatform: ${document.getElementById('cap-platform').value}\nVoice: ${document.getElementById('cap-voice').value}\nLength: ${document.getElementById('cap-length').value}\n\nProvide all requested variations with emojis, hashtags, and engagement hooks.`;
+  } else if (type === 'video') {
+    resultId = 'video-result'; resultBodyId = 'video-result-body';
+    prompt = `Write a video script for:\nType: ${document.getElementById('vid-type').value}\nStyle: ${document.getElementById('vid-tone').value}\nMessage: ${document.getElementById('vid-message').value}\n\nInclude: Scene-by-scene breakdown, voiceover script, visual directions, music mood, and on-screen text.`;
+  } else {
+    resultId = 'brief-result'; resultBodyId = 'brief-result-body';
+    prompt = `Create a creative brief for:\nProject: ${document.getElementById('brief-name').value}\nStyle: ${document.getElementById('brief-style').value}\nDeliverables: ${document.getElementById('brief-deliverables').value}\nObjective: ${document.getElementById('brief-objective').value}\n\nProvide: Creative concept, visual direction, color palette, typography suggestions, key visuals, do's and don'ts, and reference inspirations.`;
+  }
+  btn.disabled = true;
+  const origText = btn.textContent; btn.innerHTML = '<div class="spinner"></div> Creating...';
+  const resultDiv = document.getElementById(resultId);
+  resultDiv.classList.remove('show');
+  try {
+    const reply = await callModule('graphics', prompt);
+    document.getElementById(resultBodyId).textContent = reply;
+    resultDiv.classList.add('show');
+    showToast('Creative content ready');
+  } catch(e) { alert('API Error: ' + e.message); }
+  btn.disabled = false; btn.textContent = origText;
+}
+</script>
+</body>
+</html>
