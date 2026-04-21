@@ -1,0 +1,19 @@
+{
+  "name": "doctigo-insight",
+  "version": "3.0.0",
+  "description": "Doctigo Insight — AI Intelligence Platform for Healthcare",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "node-fetch": "^2.7.0"
+  },
+  "engines": { "node": ">=18.0.0" }
+}
